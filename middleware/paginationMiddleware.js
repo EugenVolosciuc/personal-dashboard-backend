@@ -1,13 +1,15 @@
 const { ErrorHandler } = require('../utils/errorHandler');
 
 // Populated fields (array of fields of collection strings that should be populated)
-const paginate = (model, populatedFields) => {
+const paginate = (model, populatedFields, loggedInUserData) => {
     return async (req, res, next) => {
         try {
             const page = parseInt(req.query.page) || 1;
             const perPage = parseInt(req.query.perPage) || 15;
             const sortBy = req.query.sortBy ? JSON.parse(req.query.sortBy) : { createdAt: 'descending' };
-            const filters = req.query.filters ? JSON.parse(req.query.filters) : {};
+            let filters = req.query.filters ? JSON.parse(req.query.filters) : {};
+
+            if (loggedInUserData) filters = { ...filters, user: req.user._id }
 
             const startIndex = (page - 1) * perPage;
             const endIndex = page * perPage;

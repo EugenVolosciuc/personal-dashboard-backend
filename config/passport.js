@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 const passport = require('passport');
 
 const User = require('../database/models/User');
+const { ErrorHandler } = require('../utils/errorHandler');
 
 const initializePassport = function (passport) {
   passport.use(new LocalStrategy(
