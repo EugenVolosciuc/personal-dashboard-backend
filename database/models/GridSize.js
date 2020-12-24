@@ -9,14 +9,14 @@ const gridSizeSchema = mongoose.Schema({
     type: Number,
     required: [true, 'Height is required']
   },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  widgetPositions: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'WidgetPosition'
-  }]
+  // user: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'User'
+  // },
+  // widgetPositions: [{
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'WidgetPosition'
+  // }]
 });
 
 const GridSize = mongoose.model('GridSize', gridSizeSchema);

@@ -32,6 +32,8 @@ initializePassport(passport);
 
 app.use('/users', require('./routes/userRoutes'));
 app.use('/notes', require('./routes/noteRoutes'));
+app.use('/grid-sizes', require('./routes/gridSizeRoutes'));
+app.use('/widget-positions', require('./routes/widgetPositionRoutes'));
 
 // Error handling
 app.use((err, req, res, next) => {

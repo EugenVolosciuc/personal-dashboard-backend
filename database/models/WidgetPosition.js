@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-const GridSize = require('./GridSize');
-
 const widgetPositionSchema = mongoose.Schema({
   gridSize: {
     type: mongoose.Schema.Types.ObjectId,
@@ -27,21 +25,6 @@ const widgetPositionSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
-});
-
-widgetPositionSchema.pre('save', async function (next) {
-  // Update widgetPositions field in grid size
-  try {
-    const gridSize = await GridSize.findById(this.gridSize);
-
-    gridSize.widgetPositions = [...gridSize.widgetPositions, this._id];
-
-    await gridSize.save();
-  } catch (error) {
-    next(error);
-  }
-
-  next();
 });
 
 const WidgetPosition = mongoose.model('WidgetPosition', widgetPositionSchema);
