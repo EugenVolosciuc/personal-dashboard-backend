@@ -13,6 +13,14 @@ const widgetPositionSchema = mongoose.Schema({
     type: Number,
     required: [true, 'Y is required']
   },
+  width: {
+    type: Number,
+    required: [true, 'Widget width is required']
+  },
+  height: {
+    type: Number,
+    required: [true, 'Widget width is required']
+  },
   title: {
     type: String,
     required: [true, 'Title is required']
@@ -24,7 +32,7 @@ const widgetPositionSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
-  },
+  }
 });
 
 const WidgetPosition = mongoose.model('WidgetPosition', widgetPositionSchema);
