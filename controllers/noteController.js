@@ -15,7 +15,7 @@ module.exports.getNotes = async (req, res, next) => {
   }
 }
 
-// @desc    Create notes
+// @desc    Create note
 // @route   POST /notes
 // @access  Private
 module.exports.createNote = async (req, res, next) => {
@@ -28,8 +28,8 @@ module.exports.createNote = async (req, res, next) => {
   }
 }
 
-// @desc    Create notes
-// @route   POST /notes
+// @desc    Modify note
+// @route   PATCH /notes/:id
 // @access  Private
 module.exports.modifyNote = async (req, res, next) => {
   const possibleUpdates = Object.keys(Note.schema.obj);
@@ -46,6 +46,23 @@ module.exports.modifyNote = async (req, res, next) => {
     await note.save();
 
     res.json();
+  } catch (error) {
+    next(error);
+  }
+}
+
+// @desc    Delete note
+// @route   DELETE /notes/:id
+// @access  Private
+module.exports.deleteNote = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const note = await Note.findByIdAndDelete(id);
+
+    if (!note) throw new ErrorHandler(404, 'Note not found');
+
+    res.json(note);
   } catch (error) {
     next(error);
   }
