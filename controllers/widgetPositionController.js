@@ -31,11 +31,11 @@ module.exports.updateWidgetPosition = async (req, res, next) => {
 
   try {
     const widgetPosition = await WidgetPosition.findById(id);
-
     if (!widgetPosition) throw new ErrorHandler(404, 'Widget position not found');
 
     checkAndUpdateProperties(widgetPosition, dataToUpdate, possibleUpdates);
 
+    await widgetPosition.save();
     res.json(widgetPosition);
   } catch (error) {
     next(error);

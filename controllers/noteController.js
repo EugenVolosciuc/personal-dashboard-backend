@@ -44,6 +44,8 @@ module.exports.modifyNote = async (req, res, next) => {
     checkAndUpdateProperties(note, dataToUpdate, possibleUpdates);
 
     await note.save();
+
+    res.json();
   } catch (error) {
     next(error);
   }
