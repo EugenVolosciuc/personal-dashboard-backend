@@ -1,5 +1,6 @@
 const User = require('../database/models/User');
 const { ErrorHandler } = require('../utils/errorHandler');
+const checkAndUpdateProperties = require('../utils/updatablePropertyChecker');
 const { passport } = require('../config/passport');
 
 const maxAge = 3 * 24 * 60 * 60; // days, hours, minutes, seconds
@@ -9,8 +10,6 @@ const maxAge = 3 * 24 * 60 * 60; // days, hours, minutes, seconds
 // @access  Public
 module.exports.getMe = async (req, res, next) => {
   try {
-    if (!req.user) return res.status(404).json({ message: 'Not logged in' });
-    
     res.json(req.user);
   } catch (error) {
     next(error);
@@ -40,7 +39,30 @@ module.exports.createUser = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
+}
+
+// @desc    Modify user
+// @route   PATCH /users
+// @access  Private
+module.exports.modifyUser = async (req, res, next) => {
+  const possibleUpdates = Object.keys(User.schema.obj);
+  const dataToUpdate = req.body;
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById(id);
+
+    if (!user) throw new ErrorHandler(404, 'User not found');
+
+    checkAndUpdateProperties(user, dataToUpdate, possibleUpdates);
+
+    await user.save();
+
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+}
 
 // @desc    Login user
 // @route   POST /users/login

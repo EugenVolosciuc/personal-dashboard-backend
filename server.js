@@ -9,7 +9,7 @@ const { passport, initializePassport } = require('./config/passport');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Config
+// CONFIG
 require('dotenv').config();
 app.use(express.json());
 app.use(cors({ 
@@ -24,18 +24,23 @@ app.use(session({
 
 connectToDB();
 
-// Auth
+// AUTH
 app.use(passport.initialize());
 app.use(passport.session());
 initializePassport(passport);
 
-app.use('/users', require('./routes/userRoutes'));
+// ROUTES
+// Widgets
 app.use('/notes', require('./routes/noteRoutes'));
 app.use('/todos', require('./routes/todoRoutes'));
+app.use('/weather', require('./routes/weatherRoutes'));
+
+// Others
+app.use('/users', require('./routes/userRoutes'));
 app.use('/grid-sizes', require('./routes/gridSizeRoutes'));
 app.use('/widget-positions', require('./routes/widgetPositionRoutes'));
 
-// Error handling
+// ERROR HANDLING
 app.use((err, req, res, next) => {
     handleError(err, res);
 });
