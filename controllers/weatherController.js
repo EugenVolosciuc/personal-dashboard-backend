@@ -8,6 +8,8 @@ const OWM_BASE_URL = 'http://api.openweathermap.org'
 // @route   GET /weather
 // @access  Private
 module.exports.getWeather = async (req, res, next) => {
+  if (!req.user.location) throw new ErrorHandler(400, "Please add your location before getting the weather data");
+
   const { latitude, longitude } = req.user.location;
 
   try {
@@ -27,12 +29,10 @@ module.exports.getWeather = async (req, res, next) => {
 module.exports.getCoordinates = async (req, res, next) => {
   const { search } = req.query;
 
-  if (!search) throw new ErrorHandler(400, 'No search parameter was provided');
-
   try {
-    const { data } = await axios.get(`${OWM_BASE_URL}/geo/1.0/direct?q=${search}&appid=${process.env.OPEN_WEATHER_API_KEY}`);
+    if (!search) throw new ErrorHandler(400, 'No search parameter was provided');
 
-    console.log("DATA", data)
+    const { data } = await axios.get(`${OWM_BASE_URL}/geo/1.0/direct?q=${search}&appid=${process.env.OPEN_WEATHER_API_KEY}`);
 
     res.json(data);
   } catch (error) {

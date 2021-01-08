@@ -66,20 +66,22 @@ userSchema.pre('save', async function (next) {
     this.password = await bcrypt.hash(this.password, salt);
   }
 
-  // Save location city and country before saving location
+  // If user added location automatically with the browser's geolocation API, save location city before saving location
   if (this.isModified('location')) {
-    const { latitude, longitude } = this.location;
+    const { latitude, longitude, city } = this.location;
 
-    try {
-      const { data } = await axios.get(`${MQ_BASE_URL}?key=${process.env.MAP_QUEST_API_KEY}&location=${latitude},${longitude}&thumbMaps=false`);
+    if (!city) {
+      try {
+        const { data } = await axios.get(`${MQ_BASE_URL}?key=${process.env.MAP_QUEST_API_KEY}&location=${latitude},${longitude}&thumbMaps=false`);
 
-      this.location = {
-        ...this.location,
-        city: get(data, 'results[0].locations[0].adminArea5', ''),
-        country: get(data, 'results[0].locations[0].adminArea1', ''),
+        this.location = {
+          ...this.location,
+          city: get(data, 'results[0].locations[0].adminArea5', ''),
+          // country: get(data, 'results[0].locations[0].adminArea1', ''),
+        }
+      } catch (error) {
+        console.log("Error saving location city and country");
       }
-    } catch (error) {
-      console.log("Error saving location city and country");
     }
   }
   next();
