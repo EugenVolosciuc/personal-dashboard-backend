@@ -5,6 +5,7 @@ const axios = require('axios');
 const get = require('lodash/get');
 
 const { ErrorHandler } = require('../../utils/errorHandler');
+const Notebook = require('../models/Notebook');
 
 const MQ_BASE_URL = 'http://www.mapquestapi.com/geocoding/v1/reverse'
 
@@ -83,6 +84,11 @@ userSchema.pre('save', async function (next) {
         console.log("Error saving location city and country");
       }
     }
+  }
+
+  // Create general notebook
+  if (this.isNew) {
+    await Notebook.create({ user: this._id, title: 'General' });
   }
   next();
 });

@@ -10,6 +10,10 @@ const noteSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
+  },
+  notebook: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Notebook'
   }
 }, {
   timestamps: true

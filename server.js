@@ -32,6 +32,7 @@ initializePassport(passport);
 // ROUTES
 // Widgets
 app.use('/notes', require('./routes/noteRoutes'));
+app.use('/notebooks', require('./routes/notebookRoutes'));
 app.use('/todos', require('./routes/todoRoutes'));
 app.use('/weather', require('./routes/weatherRoutes'));
 
@@ -45,4 +46,5 @@ app.use((err, req, res, next) => {
     handleError(err, res);
 });
 
+// RUN SERVER
 app.listen(PORT, console.log(`Server is running on ${process.env.NODE_ENV} on port ${PORT}`));
