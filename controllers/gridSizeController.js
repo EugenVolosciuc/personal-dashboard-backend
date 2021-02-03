@@ -1,5 +1,8 @@
 const GridSize = require('../database/models/GridSize');
 
+// @desc    Get grid sizes
+// @route   GET /grid-sizes
+// @access  Private
 module.exports.getGridSize = async (req, res, next) => {
   const { width, height } = req.query;
 
