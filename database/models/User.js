@@ -81,7 +81,7 @@ userSchema.pre('save', async function (next) {
           // country: get(data, 'results[0].locations[0].adminArea1', ''),
         }
       } catch (error) {
-        console.log("Error saving location city and country");
+        console.log("Error saving location city and country", error);
       }
     }
   }
