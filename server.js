@@ -15,7 +15,12 @@ const PORT = process.env.PORT || 3001;
 // CONFIG
 // Redis config
 const redisURL = new URL(process.env.REDISCLOUD_URL);
-const redisClient = redis.createClient({ host: redisURL.hostname, port: redisURL.port, password: process.env.REDISCLOUD_URL_PASS });
+const redisClient = redis.createClient({ 
+  host: redisURL.hostname, 
+  port: redisURL.port, 
+  password: process.env.REDISCLOUD_URL_PASS,
+  no_ready_check: true
+});
 redisClient.on('error', (err) => {
   console.log('Redis error: ', err);
 });
@@ -38,7 +43,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: true,
   name: "PD_SESSION",
-  // cookie: { secure: true, maxAge: 60000 * 60 * 24 }, // 1 minute * 60 minutes * 24 hours = 1 day
+  cookie: { secure: true, maxAge: 60000 * 60 * 24 }, // 1 minute * 60 minutes * 24 hours = 1 day
   saveUninitialized: false
 }));
 
