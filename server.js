@@ -13,6 +13,7 @@ const redisClient = redis.createClient();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const redisURL = new URL(process.env.REDISCLOUD_URL);
 
 // Log redis error
 redisClient.on('error', (err) => {
@@ -31,7 +32,7 @@ app.use(session({
     return uuid()
   },
   ...(process.env.NODE_ENV === 'production'
-    ? { store: new redisStore({ host: process.env.REDIS_DEV_HOST, port: process.env.REDIS_DEV_PORT, client: redisClient }) }
+    ? { store: new redisStore({ host: redisURL.hostname, port: redisURL.port, client: redisClient }) }
     : {}
   ),
   name: 'REDIS_SESSION_CACHE',
