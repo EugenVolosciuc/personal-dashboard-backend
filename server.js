@@ -40,11 +40,10 @@ app.use(session({
     ? { store: new redisStore({ client: redisClient }) }
     : {}
   ),
-  name: 'REDIS_SESSION_CACHE',
   secret: process.env.SESSION_SECRET,
-  resave: true,
-  name: "PD_SESSION",
-  cookie: { secure: true, maxAge: 60000 * 60 * 24 }, // 1 minute * 60 minutes * 24 hours = 1 day
+  resave: false,
+  name: "pd_session",
+  cookie: { secure: false, maxAge: 60000 * 60 * 24 }, // 1 minute * 60 minutes * 24 hours = 1 day
   saveUninitialized: false
 }));
 
