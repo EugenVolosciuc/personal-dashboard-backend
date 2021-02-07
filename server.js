@@ -32,6 +32,7 @@ app.use(cors({
   credentials: true,
   origin: [process.env.FRONTEND_LOCAL_LINK, process.env.FRONTEND_DEV_LINK]
 }));
+app.set('trust proxy', 1);
 app.use(session({
   genid: () => {
     return uuid()
