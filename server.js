@@ -15,9 +15,9 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Log redis error
-// redisClient.on('error', (err) => {
-//   console.log('Redis error: ', err);
-// });
+redisClient.on('error', (err) => {
+  console.log('Redis error: ', err);
+});
 
 // CONFIG
 require('dotenv').config();
