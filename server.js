@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3001;
 // CONFIG
 // Redis config
 const redisURL = new URL(process.env.REDISCLOUD_URL);
-const redisClient = redis.createClient({ host: redisURL.hostname, port: redisURL.port });
+const redisClient = redis.createClient({ host: redisURL.hostname, port: redisURL.port, password: process.env.REDISCLOUD_URL_PASS });
 redisClient.on('error', (err) => {
   console.log('Redis error: ', err);
 });
@@ -24,7 +24,7 @@ require('dotenv').config();
 app.use(express.json());
 app.use(cors({
   credentials: true,
-  origin: [process.env.FRONTEND_LOCAL_LINK, process.env.FRONTEND_DEV_LINK] // TODO: add production link when will launch product
+  origin: [process.env.FRONTEND_LOCAL_LINK, process.env.FRONTEND_DEV_LINK]
 }));
 app.use(session({
   genid: () => {
