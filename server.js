@@ -41,6 +41,7 @@ app.use(session({
     ? { store: new redisStore({ client: redisClient }) }
     : {}
   ),
+  proxy: true,
   secret: process.env.SESSION_SECRET,
   resave: false,
   name: "pd_session",
