@@ -9,18 +9,17 @@ const connectToDB = require('./database/connect');
 const { handleError } = require('./utils/errorHandler');
 const { passport, initializePassport } = require('./config/passport');
 
-const redisClient = redis.createClient({ host: redisURL.hostname, port: redisURL.port });
-
 const app = express();
 const PORT = process.env.PORT || 3001;
-const redisURL = new URL(process.env.REDISCLOUD_URL);
 
-// Log redis error
+// CONFIG
+// Redis config
+const redisURL = new URL(process.env.REDISCLOUD_URL);
+const redisClient = redis.createClient({ host: redisURL.hostname, port: redisURL.port });
 redisClient.on('error', (err) => {
   console.log('Redis error: ', err);
 });
 
-// CONFIG
 require('dotenv').config();
 app.use(express.json());
 app.use(cors({
