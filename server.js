@@ -9,7 +9,7 @@ const connectToDB = require('./database/connect');
 const { handleError } = require('./utils/errorHandler');
 const { passport, initializePassport } = require('./config/passport');
 
-const redisClient = redis.createClient();
+const redisClient = redis.createClient({ host: redisURL.hostname, port: redisURL.port });
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -32,7 +32,7 @@ app.use(session({
     return uuid()
   },
   ...(process.env.NODE_ENV === 'production'
-    ? { store: new redisStore({ host: redisURL.hostname, port: redisURL.port, client: redisClient }) }
+    ? { store: new redisStore({ client: redisClient }) }
     : {}
   ),
   name: 'REDIS_SESSION_CACHE',
