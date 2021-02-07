@@ -2,14 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
 const { v4: uuid } = require('uuid');
-// const redis = require('redis');
+const redis = require('redis');
 const redisStore = require('connect-redis')(session);
 
 const connectToDB = require('./database/connect');
 const { handleError } = require('./utils/errorHandler');
 const { passport, initializePassport } = require('./config/passport');
 
-// const redisClient = redis.createClient();
+const redisClient = redis.createClient();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
