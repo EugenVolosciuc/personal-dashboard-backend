@@ -14,8 +14,6 @@ const { passport, initializePassport } = require('./config/passport');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-console.log("process.env.NODE_ENV")
-
 // Log redis error
 // redisClient.on('error', (err) => {
 //   console.log('Redis error: ', err);
