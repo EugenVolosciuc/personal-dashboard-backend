@@ -14,7 +14,7 @@ require('dotenv').config();
 app.use(express.json());
 app.use(cors({ 
     credentials: true, 
-    origin: process.env.FRONTEND_DEV_LINK // TODO: add production link when will launch product
+    origin: [process.env.FRONTEND_LOCAL_LINK, process.env.FRONTEND_DEV_LINK] // TODO: add production link when will launch product
 })); 
 app.use(session({
     secret: process.env.SESSION_SECRET,
