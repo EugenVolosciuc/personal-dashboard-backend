@@ -13,6 +13,9 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // CONFIG
+require('dotenv').config();
+app.use(express.json());
+
 // Redis config
 const redisURL = new URL(process.env.REDISCLOUD_URL);
 const redisClient = redis.createClient({ 
@@ -25,8 +28,6 @@ redisClient.on('error', (err) => {
   console.log('Redis error: ', err);
 });
 
-require('dotenv').config();
-app.use(express.json());
 app.use(cors({
   credentials: true,
   origin: [process.env.FRONTEND_LOCAL_LINK, process.env.FRONTEND_DEV_LINK]
