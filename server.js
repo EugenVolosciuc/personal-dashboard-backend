@@ -30,7 +30,7 @@ app.use(cors({
   origin: [process.env.FRONTEND_LOCAL_LINK, process.env.FRONTEND_DEV_LINK]
 }));
 
-// app.set('trust proxy');
+app.set('trust proxy');
 
 app.use(session({
   genid: () => {
@@ -40,7 +40,7 @@ app.use(session({
     ? { store: new RedisStore({ client: redisClient }) }
     : { store: new RedisStore({ host: 'localhost', port: 6379, client: redisClient, ttl: 86400 }) }
   ),
-  // proxy: true,
+  proxy: true,
   secret: process.env.SESSION_SECRET,
   resave: false,
   name: "pd_session",
