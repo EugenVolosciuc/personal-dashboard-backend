@@ -44,7 +44,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   name: "pd_session",
-  // cookie: { secure: false, maxAge: 60000 * 60 * 24 }, // 1 minute * 60 minutes * 24 hours = 1 day
+  cookie: { secure: true, sameSite: 'none', maxAge: 60000 * 60 * 24 }, // 1 minute * 60 minutes * 24 hours = 1 day
   saveUninitialized: false
 }));
 
