@@ -18,7 +18,7 @@ app.use(express.json());
 
 // Redis config
 const redisClient = redis.createClient({
-  url: process.env.NODE_ENV === 'production' ? process.env.REDISCLOUD_URL : process.env.REDISCLOUD_LOCAL_URL,
+  url: process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : process.env.REDIS_LOCAL_URL,
   no_ready_check: true
 });
 redisClient.on('error', (err) => {
