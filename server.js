@@ -3,7 +3,7 @@ const cors = require('cors');
 const session = require('express-session');
 const { v4: uuid } = require('uuid');
 const redis = require('redis');
-const redisStore = require('connect-redis')(session);
+const RedisStore = require('connect-redis')(session);
 
 const connectToDB = require('./database/connect');
 const { handleError } = require('./utils/errorHandler');
@@ -17,8 +17,8 @@ require('dotenv').config();
 app.use(express.json());
 
 // Redis config
-const redisClient = redis.createClient({ 
-  url: process.env.REDISCLOUD_URL,
+const redisClient = redis.createClient({
+  url: process.env.NODE_ENV === 'production' ? process.env.REDISCLOUD_URL : process.env.REDISCLOUD_LOCAL_URL,
   no_ready_check: true
 });
 redisClient.on('error', (err) => {
@@ -29,16 +29,18 @@ app.use(cors({
   credentials: true,
   origin: [process.env.FRONTEND_LOCAL_LINK, process.env.FRONTEND_DEV_LINK]
 }));
-app.set('trust proxy', 1);
+
+// app.set('trust proxy');
+
 app.use(session({
   genid: () => {
     return uuid()
   },
   ...(process.env.NODE_ENV === 'production'
-    ? { store: new redisStore({ client: redisClient }) }
-    : {}
+    ? { store: new RedisStore({ client: redisClient }) }
+    : { store: new RedisStore({ host: 'localhost', port: 6379, client: redisClient, ttl: 86400 }) }
   ),
-  proxy: true,
+  // proxy: true,
   secret: process.env.SESSION_SECRET,
   resave: false,
   name: "pd_session",
