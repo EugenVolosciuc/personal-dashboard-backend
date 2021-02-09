@@ -12,18 +12,24 @@ const { passport, initializePassport } = require('./config/passport');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 // CONFIG
 require('dotenv').config();
 app.use(express.json());
 
 // Redis config
-const redisClient = redis.createClient({
-  url: process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : process.env.REDIS_LOCAL_URL,
-  no_ready_check: true
-});
-redisClient.on('error', (err) => {
-  console.log('Redis error: ', err);
-});
+if (isProduction) {
+  const redisClient = redis.createClient({
+    url: process.env.REDIS_URL,
+    no_ready_check: true
+  });
+
+  redisClient.on('error', (err) => {
+    console.log('Redis error: ', err);
+  });
+}
+
 
 app.use(cors({
   credentials: true,
@@ -36,15 +42,19 @@ app.use(session({
   genid: () => {
     return uuid()
   },
-  ...(process.env.NODE_ENV === 'production'
+  ...(isProduction
     ? { store: new RedisStore({ client: redisClient }) }
-    : { store: new RedisStore({ host: 'localhost', port: 6379, client: redisClient, ttl: 86400 }) }
+    : null
   ),
   proxy: true,
   secret: process.env.SESSION_SECRET,
   resave: false,
   name: "pd_session",
-  cookie: { secure: true, sameSite: 'none', maxAge: 60000 * 60 * 24 }, // 1 minute * 60 minutes * 24 hours = 1 day
+  cookie: {
+    secure: isProduction ? true : false, 
+    sameSite: isProduction ? 'none' : false, 
+    maxAge: 60000 * 60 * 24 // 1 minute * 60 minutes * 24 hours = 1 day
+  },
   saveUninitialized: false
 }));
 
