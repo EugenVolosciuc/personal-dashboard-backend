@@ -19,7 +19,7 @@ const initializePassport = function (passport) {
         }
       } catch (error) {
         done(null, false)
-        throw new ErrorHandler(error.status, error.message);
+        // throw new ErrorHandler(error.status, error.message);
       }
     }));
 

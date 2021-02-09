@@ -16,7 +16,7 @@ const noteSchema = mongoose.Schema({
   notebook: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Notebook',
-    set: function(notebook) {
+    set: function (notebook) {
       this._previousNotebook = this.notebook;
       return notebook;
     }
@@ -41,19 +41,19 @@ noteSchema.pre('save', async function (next) {
   }
 
   // When moving note, delete note from previous notebook's notes list and add it to the new notebook
-  if (this.isModified('notebook')) {
+  if (!this.isNew && this.isModified('notebook')) {
     try {
       const previousNotebookID = this._previousNotebook;
 
       const previousNotebook = await Notebook.findById(previousNotebookID);
       const newNotebook = await Notebook.findById(this.notebook);
-  
-      previousNotebook.notes = previousNotebook.notes.filter(note => note._id !== this._id);
+
+      previousNotebook.notes = previousNotebook.notes.filter(note => !note._id.equals(this._id));
       newNotebook.notes = [...newNotebook.notes, this._id];
-  
+
       previousNotebook.updatedAt = new Date();
       newNotebook.updatedAt = new Date();
-  
+
       await previousNotebook.save();
       await newNotebook.save();
     } catch (error) {
@@ -64,12 +64,12 @@ noteSchema.pre('save', async function (next) {
   next();
 });
 
-noteSchema.pre('findOneAndDelete', async function(next) {
+noteSchema.post('findOneAndDelete', async function (doc, next) {
   // Remove note from notes list in notebook
   try {
-    const notebook = await Notebook.findById(this._id);
+    const notebook = await Notebook.findById(doc.notebook);
 
-    notebook.notes = notebook.notes.filter(note => note._id !== this._id);
+    notebook.notes = notebook.notes.filter(note => !note._id.equals(doc._id));
     notebook.updatedAt = new Date();
 
     await notebook.save();
