@@ -17,11 +17,8 @@ require('dotenv').config();
 app.use(express.json());
 
 // Redis config
-const redisURL = new URL(process.env.REDISCLOUD_URL);
 const redisClient = redis.createClient({ 
-  host: redisURL.hostname, 
-  port: redisURL.port, 
-  password: process.env.REDISCLOUD_URL_PASS,
+  url: process.env.REDISCLOUD_URL,
   no_ready_check: true
 });
 redisClient.on('error', (err) => {
