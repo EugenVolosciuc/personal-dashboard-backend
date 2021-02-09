@@ -73,4 +73,4 @@ app.use((err, req, res, next) => {
 });
 
 // RUN SERVER
-app.listen(PORT, console.log(`Server is running on ${process.env.NODE_ENV} on port ${PORT}`));
+app.listen(PORT, console.log(`Server is running in ${process.env.NODE_ENV} on port ${PORT}`));

@@ -7,7 +7,7 @@ const { getNotes, createNote, modifyNote, deleteNote } = require('../controllers
 
 const router = express.Router();
 
-router.get('/', auth, paginate(Note), getNotes);
+router.get('/', auth, paginate(Note, null, true), getNotes);
 router.post('/', auth, createNote);
 router.patch('/:id', auth, modifyNote);
 router.delete('/:id', auth, deleteNote);

@@ -7,7 +7,7 @@ const { getTodos, createTodo, modifyTodo, deleteTodo } = require('../controllers
 
 const router = express.Router();
 
-router.get('/', auth, paginate(Todo), getTodos);
+router.get('/', auth, paginate(Todo, null, true), getTodos);
 router.post('/', auth, createTodo);
 router.patch('/:id', auth, modifyTodo);
 router.delete('/:id', auth, deleteTodo);
