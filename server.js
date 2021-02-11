@@ -18,8 +18,9 @@ require('dotenv').config();
 app.use(express.json());
 
 // Redis config
+let redisClient;
 if (isProduction) {
-  const redisClient = redis.createClient({
+  redisClient = redis.createClient({
     url: process.env.REDIS_URL,
     no_ready_check: true
   });
@@ -28,7 +29,6 @@ if (isProduction) {
     console.log('Redis error: ', err);
   });
 }
-
 
 app.use(cors({
   credentials: true,
