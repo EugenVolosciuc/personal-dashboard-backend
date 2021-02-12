@@ -15,6 +15,10 @@ const todoSchema = mongoose.Schema({
   },
   due: {
     type: Date
+  },
+  priority: {
+    type: Number,
+    enum: [1, 2, 3, null]
   }
 }, {
   timestamps: true
